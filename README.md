@@ -12,10 +12,26 @@ Este proyecto implementa el juego clásico de 3 en raya (Tic-Tac-Toe), desarroll
 6. [Características Principales](#características-principales)
 7. [Diagrama de la Arquitectura](#diagrama-de-la-arquitectura)
 8. [Contribuciones](#contribuciones)
+## Imágenes del Proyecto
 
-![Descripción de la imagen](img/ejem1.png)
-![Descripción de la imagen](img/ejem2.png)
-![Descripción de la imagen](img/ejemp3.png)
+A continuación se presentan algunas imágenes relevantes del proyecto:
+
+### Ejemplo 1
+
+![Ejemplo 1](img/ejem1.png)
+
+---
+
+### Ejemplo 2
+
+![Ejemplo 2](img/ejem2.png)
+
+---
+
+### Ejemplo 3
+
+![Ejemplo 3](img/ejemp3.png)
+
 
 ---
 
