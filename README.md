@@ -14,6 +14,8 @@ Este proyecto implementa el juego clásico de 3 en raya (Tic-Tac-Toe), desarroll
 8. [Contribuciones](#contribuciones)
 
 ![Descripción de la imagen](img/ejem1.png)
+![Descripción de la imagen](img/ejem2.png)
+![Descripción de la imagen](img/ejemp3.png)
 
 ---
 
