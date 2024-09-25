@@ -13,6 +13,7 @@ Este proyecto implementa el juego clásico de 3 en raya (Tic-Tac-Toe), desarroll
 7. [Diagrama de la Arquitectura](#diagrama-de-la-arquitectura)
 8. [Contribuciones](#contribuciones)
 
+![Descripción de la imagen](img/ejem1.png)
 
 ---
 
