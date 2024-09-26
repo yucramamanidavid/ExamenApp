@@ -149,7 +149,7 @@ graph TD
     style F fill:#f96,stroke:#333,stroke-width:2px
     style G fill:#f96,stroke:#333,stroke-width:2px
 ```
-#contribuciones
+## Contribuciones
 -**Rosaura**: MainActivity.kt, GameResult.kt, TicTacToeViewModelFactory.kt
 -**David**: GameResultDao.kt, GameResultRepository.kt, TicTacToeViewModel.kt, AppDatabase.kt, TicTacToeScreen.kt
 -**Mykol**:
