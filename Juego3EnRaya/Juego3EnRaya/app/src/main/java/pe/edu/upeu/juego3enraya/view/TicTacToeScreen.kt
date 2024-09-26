@@ -21,6 +21,7 @@ import pe.edu.upeu.juego3enraya.ui.viewmodel.TicTacToeViewModel
 @Composable
 fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: TicTacToeViewModel = viewModel()) {
 
+    // La vista ahora interactúa con el ViewModel para obtener y modificar el estado
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -47,11 +48,15 @@ fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TicTacToeBoard(viewModel = viewModel)
+        TicTacToeBoard(
+            viewModel = viewModel
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { viewModel.resetGame() }) {
+        Button(onClick = {
+            viewModel.resetGame()
+        }) {
             Text(text = if (viewModel.isGameActive.value) "Reiniciar" else "Iniciar")
         }
 
@@ -85,19 +90,17 @@ fun TicTacToeBoard(viewModel: TicTacToeViewModel) {
         for (i in 0..2) {
             Row {
                 for (j in 0..2) {
-                    val index = i * 3 + j
                     Box(
                         modifier = Modifier
                             .size(100.dp)
                             .padding(8.dp)
-                            .background(viewModel.cellColors[index], shape = RoundedCornerShape(8.dp))
-                            .clickable(enabled = viewModel.isGameActive.value && viewModel.board[index].isEmpty()) {
-                                // Hacer el movimiento y cambiar el color según el jugador
-                                viewModel.makeMove(index)
+                            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+                            .clickable(enabled = viewModel.isGameActive.value && viewModel.board[i * 3 + j].isEmpty()) {
+                                viewModel.makeMove(i * 3 + j)
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = viewModel.board[index], fontSize = 36.sp, color = Color.White)
+                        Text(text = viewModel.board[i * 3 + j], fontSize = 36.sp, color = Color.White)
                     }
                 }
             }
