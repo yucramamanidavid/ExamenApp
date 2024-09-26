@@ -16,16 +16,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.edu.upeu.juego3enraya.model.GameResult
+import pe.edu.upeu.juego3enraya.ui.exportResultsToPDF
 import pe.edu.upeu.juego3enraya.ui.viewmodel.TicTacToeViewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: TicTacToeViewModel = viewModel()) {
+
+    val gameResults by viewModel.gameResults.collectAsState() // Obtener resultados del ViewModel
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxSize()
     ) {
+
+        // Mostrar el tiempo restante
+        Text(
+            text = "Tiempo restante: ${viewModel.timeRemaining.value}s",
+            fontSize = 24.sp,
+            modifier = Modifier.padding(16.dp)
+        )
+
         TextField(
             value = viewModel.nombreJugador1.value,
             onValueChange = { viewModel.nombreJugador1.value = it },
@@ -51,15 +63,27 @@ fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { viewModel.resetGame() }) {
+        Button(onClick = {
+            viewModel.resetGame()
+        }) {
             Text(text = if (viewModel.isGameActive.value) "Reiniciar" else "Iniciar")
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text("Resultados anteriores:", fontSize = 20.sp)
+        // Usar un Row para alinear el texto y el botón de exportar en lados opuestos
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Resultados anteriores:", fontSize = 20.sp)
+            ExportResultsButton(gameResults, context) // Botón de exportar resultados
+        }
+
+        // Lista de resultados
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(viewModel.gameResults) { result ->
+            items(gameResults) { result ->
                 GameResultItem(result = result)
             }
         }
@@ -79,6 +103,7 @@ fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: 
     }
 }
 
+
 @Composable
 fun TicTacToeBoard(viewModel: TicTacToeViewModel) {
     Column {
@@ -90,9 +115,15 @@ fun TicTacToeBoard(viewModel: TicTacToeViewModel) {
                         modifier = Modifier
                             .size(100.dp)
                             .padding(8.dp)
-                            .background(viewModel.cellColors[index], shape = RoundedCornerShape(8.dp))
+                            .background(
+                                when (viewModel.board[index]) {
+                                    "X" -> Color.Red // Color para "X"
+                                    "O" -> Color.Blue // Color para "O"
+                                    else -> Color.Gray // Color para vacío
+                                },
+                                shape = RoundedCornerShape(8.dp)
+                            )
                             .clickable(enabled = viewModel.isGameActive.value && viewModel.board[index].isEmpty()) {
-                                // Hacer el movimiento y cambiar el color según el jugador
                                 viewModel.makeMove(index)
                             },
                         contentAlignment = Alignment.Center
@@ -119,5 +150,14 @@ fun GameResultItem(result: GameResult) {
             Text("Puntos: ${result.puntos}", fontSize = 16.sp)
             Text("Estado: ${result.estado}", fontSize = 14.sp, color = Color.Gray)
         }
+    }
+}
+
+@Composable
+fun ExportResultsButton(gameResults: List<GameResult>, context: Context) {
+    Button(onClick = {
+        exportResultsToPDF(context, gameResults) // Llamar a la función para exportar a PDF
+    }) {
+        Text(text = "Exportar a PDF")
     }
 }
