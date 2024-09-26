@@ -152,4 +152,5 @@ graph TD
 ## Contribuciones
 -**Rosaura**: MainActivity.kt, GameResult.kt, TicTacToeViewModelFactory.kt
 -**David**: GameResultDao.kt, GameResultRepository.kt, TicTacToeViewModel.kt, AppDatabase.kt, TicTacToeScreen.kt
--**Mykol**:
+-**Mykol**: TicTacToeScreen.kt, MainActivity.kt, PdfExporter.kt, TicTacToeViewModel.kt, file_paths.xml, Theme.kt
+
