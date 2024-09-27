@@ -56,9 +56,13 @@ La aplicación sigue el patrón de diseño **MVVM (Model-View-ViewModel)**, que 
 La aplicación también integra un backend utilizando **Retrofit**, lo que permite almacenar y recuperar los resultados de las partidas en una base de datos MySQL a través de un servidor Node.js, enriqueciendo así la experiencia del usuario.
 
 
-### Ejemplo
+### Ejemplo de conexion al backend
 
-![Ejemplo 1](img/ejem5.png)
+![conexion b](img/ejem5.png)
+--
+### Ejemplo de la conexion a la bd
+
+![conexion db](img/ejem6.png)
 
 ---
 
