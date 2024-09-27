@@ -87,4 +87,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    dependencies {
+        implementation("com.itextpdf:itext7-core:7.1.15")
+        implementation("com.google.android.material:material:1.4.0")  // Usa la última versión disponible
+    }
+    implementation("androidx.compose.ui:ui:<version>")
+    implementation("androidx.compose.material:material:<version>")
+    implementation("androidx.activity:activity-compose:<version>")
+    implementation("androidx.compose.material:material-icons-extended:<version>")
+
 }

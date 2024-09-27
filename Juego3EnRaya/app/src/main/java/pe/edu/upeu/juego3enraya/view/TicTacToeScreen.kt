@@ -16,50 +16,91 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.edu.upeu.juego3enraya.model.GameResult
+import pe.edu.upeu.juego3enraya.ui.exportResultsToPDF
 import pe.edu.upeu.juego3enraya.ui.viewmodel.TicTacToeViewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: TicTacToeViewModel = viewModel()) {
+
+    val gameResults by viewModel.gameResults.collectAsState() // Obtener resultados del ViewModel
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxSize()
     ) {
+        // Llamar al TimeSelector
+        TimeSelector(viewModel)
+
+
+        // Mostrar el tiempo restante
+        Text(
+            text = "Tiempo restante: ${viewModel.timeRemaining.value}s",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(8.dp)
+        )
+
         TextField(
             value = viewModel.nombreJugador1.value,
             onValueChange = { viewModel.nombreJugador1.value = it },
             label = { Text("Nombre Jugador 1") },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
 
         TextField(
             value = viewModel.nombreJugador2.value,
             onValueChange = { viewModel.nombreJugador2.value = it },
             label = { Text("Nombre Jugador 2") },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
 
         Text(
             text = if (viewModel.isGameActive.value) "Juego en Progreso" else "Presiona Iniciar para Jugar",
-            fontSize = 24.sp
+            fontSize = 20.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         TicTacToeBoard(viewModel = viewModel)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = { viewModel.resetGame() }) {
-            Text(text = if (viewModel.isGameActive.value) "Reiniciar" else "Iniciar")
+        // Cambiar el botón de iniciar/reiniciar
+        Button(onClick = {
+            if (viewModel.gameEnded.value) {
+                viewModel.resetGame() // Reiniciar el juego cuando ha terminado
+            } else if (viewModel.isGameActive.value) {
+                viewModel.resetGame() // Reiniciar el juego en cualquier momento mientras esté activo
+            } else {
+                viewModel.startTimer() // Iniciar el temporizador cuando se presione "Iniciar"
+                viewModel.isGameActive.value = true // Activar el juego
+            }
+        }) {
+            Text(text = when {
+                viewModel.gameEnded.value -> "Reiniciar"
+                viewModel.isGameActive.value -> "Reiniciar"
+                else -> "Iniciar"
+            })
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
 
-        Text("Resultados anteriores:", fontSize = 20.sp)
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Usar un Row para alinear el texto y el botón de exportar en lados opuestos
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Resultados anteriores:", fontSize = 20.sp)
+            ExportResultsButton(gameResults, context) // Botón de exportar resultados
+        }
+
+        // Lista de resultados
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(viewModel.gameResults) { result ->
+            items(gameResults) { result ->
                 GameResultItem(result = result)
             }
         }
@@ -79,6 +120,8 @@ fun TicTacToeScreen(context: Context, modifier: Modifier = Modifier, viewModel: 
     }
 }
 
+
+
 @Composable
 fun TicTacToeBoard(viewModel: TicTacToeViewModel) {
     Column {
@@ -90,9 +133,15 @@ fun TicTacToeBoard(viewModel: TicTacToeViewModel) {
                         modifier = Modifier
                             .size(100.dp)
                             .padding(8.dp)
-                            .background(viewModel.cellColors[index], shape = RoundedCornerShape(8.dp))
+                            .background(
+                                when (viewModel.board[index]) {
+                                    "X" -> Color.Red // Color para "X"
+                                    "O" -> Color.Blue // Color para "O"
+                                    else -> Color.Gray // Color para vacío
+                                },
+                                shape = RoundedCornerShape(8.dp)
+                            )
                             .clickable(enabled = viewModel.isGameActive.value && viewModel.board[index].isEmpty()) {
-                                // Hacer el movimiento y cambiar el color según el jugador
                                 viewModel.makeMove(index)
                             },
                         contentAlignment = Alignment.Center
@@ -121,3 +170,47 @@ fun GameResultItem(result: GameResult) {
         }
     }
 }
+
+@Composable
+fun ExportResultsButton(gameResults: List<GameResult>, context: Context) {
+    Button(onClick = {
+        exportResultsToPDF(context, gameResults) // Llamar a la función para exportar a PDF
+    }) {
+        Text(text = "Exportar a PDF")
+    }
+}
+
+@Composable
+fun TimeSelector(viewModel: TicTacToeViewModel) {
+    var selectedTime by remember { mutableStateOf(10f) } // Usar Float para el Slider
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically, // Alinear verticalmente al centro
+        modifier = Modifier.fillMaxWidth().padding(8.dp) // Asegúrate de que ocupe todo el ancho
+    ) {
+        // Slider para seleccionar el tiempo
+        Column(
+            modifier = Modifier.weight(1f) // Permitir que el Slider ocupe espacio
+        ) {
+            Text("Tiempo: ${selectedTime.toInt()}s", fontSize = 14.sp) // Reducir tamaño de texto
+            Slider(
+                value = selectedTime,
+                onValueChange = { selectedTime = it },
+                valueRange = 5f..15f,
+                steps = 10,
+                modifier = Modifier.padding(horizontal = 8.dp) // Reducir padding horizontal
+            )
+        }
+
+        // Botón para confirmar la selección de tiempo
+        Button(
+            onClick = {
+                viewModel.timeRemaining.value = selectedTime.toInt() // Ajustar el tiempo en el ViewModel
+            },
+            modifier = Modifier.sizeIn(minWidth = 80.dp) // Ajustar el tamaño del botón
+        ) {
+            Text("Confirmar")
+        }
+    }
+}
+
