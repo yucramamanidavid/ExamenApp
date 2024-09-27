@@ -13,8 +13,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.edu.upeu.juego3enraya.model.AppDatabase
 import pe.edu.upeu.juego3enraya.model.GameResult
+<<<<<<< HEAD
+=======
+import androidx.compose.ui.graphics.Color
+import pe.edu.upeu.juego3enraya.repository.GameResultRepository
+>>>>>>> d90496682a9df03094df824d056fd5eadf3db2d8
 
-class TicTacToeViewModel(private val db: AppDatabase) : ViewModel() {
+class TicTacToeViewModel(private val repository: GameResultRepository) : ViewModel() {
 
     var isGameActive = mutableStateOf(false)
     var nombreJugador1 = mutableStateOf("")
@@ -37,9 +42,13 @@ class TicTacToeViewModel(private val db: AppDatabase) : ViewModel() {
     init {
         // Cargar resultados desde la base de datos
         viewModelScope.launch(Dispatchers.IO) {
+<<<<<<< HEAD
             // Recolectar el Flow emitido por la base de datos
             db.gameResultDao().getAllGameResults().collect { results ->
                 // Actualizar la lista de resultados en el hilo principal
+=======
+            repository.getGameResults().collect { results ->
+>>>>>>> d90496682a9df03094df824d056fd5eadf3db2d8
                 withContext(Dispatchers.Main) {
                     _gameResults.value = results // Actualiza el StateFlow
                 }
@@ -121,6 +130,7 @@ class TicTacToeViewModel(private val db: AppDatabase) : ViewModel() {
         isGameActive.value = false
         gameEnded.value = true // Marcar que el juego ha terminado
 
+<<<<<<< HEAD
         // Cancelar el temporizador si está activo
         if (timer != null) {
             timer?.cancel()
@@ -181,14 +191,37 @@ class TicTacToeViewModel(private val db: AppDatabase) : ViewModel() {
 
             // Actualizar la lista de resultados
             db.gameResultDao().getAllGameResults().collect { results ->
+=======
+        val gameResult = GameResult(
+            nombrePartida = "Partida $partidaContador",  // Usa el contador para el nombre de la partida
+            nombreJugador1 = nombreJugador1.value,
+            nombreJugador2 = nombreJugador2.value,
+            ganador = winner,
+            puntos = if (winner == "Empate") 5 else 10,
+            estado = "Finalizado"
+        )
+
+        // Incrementar el contador y guardar el resultado localmente y en el servidor
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertGameResult(gameResult)
+
+            partidaContador++
+
+            // Actualizar la lista de resultados después de guardar el resultado
+            repository.getGameResults().collect { results ->
+>>>>>>> d90496682a9df03094df824d056fd5eadf3db2d8
                 withContext(Dispatchers.Main) {
                     _gameResults.value = results
                 }
             }
         }
     }
+<<<<<<< HEAD
 
 
 
 
 }
+=======
+}
+>>>>>>> d90496682a9df03094df824d056fd5eadf3db2d8
