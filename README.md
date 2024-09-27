@@ -35,6 +35,41 @@ A continuación se presentan algunas imágenes relevantes del proyecto:
 
 ---
 
+### Ejemplo 4  
+
+![Ejemplo 3](img/imagen11.jpg)
+
+
+---
+
+### Ejemplo 5
+
+![Ejemplo 3](img/imagen12.jpg)
+
+
+---
+
+### Ejemplo 6
+
+![Ejemplo 3](img/imagen13.jpg)
+
+
+---
+
+### Ejemplo 7
+
+![Ejemplo 3](img/imagen14.jpg)
+
+
+---
+
+### Ejemplo 7
+
+![Ejemplo 3](img/imagen15.jpg)
+
+
+---
+
 ## Introducción
 
 El propósito de este proyecto es desarrollar una aplicación sencilla de un **juego de 3 en raya** con enfoque en la separación de responsabilidades y buenas prácticas utilizando la arquitectura **MVVM**. El patrón MVVM permite una clara distinción entre la capa de datos (modelo), la interfaz gráfica (vista) y la lógica de negocio (ViewModel), lo que facilita el mantenimiento y la escalabilidad del código.
