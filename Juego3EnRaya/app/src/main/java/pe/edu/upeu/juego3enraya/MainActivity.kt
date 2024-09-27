@@ -9,14 +9,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.edu.upeu.juego3enraya.model.AppDatabase
-import pe.edu.upeu.juego3enraya.view.TicTacToeScreen
+import pe.edu.upeu.juego3enraya.network.RetrofitInstance
+import pe.edu.upeu.juego3enraya.repository.GameResultRepository
 import pe.edu.upeu.juego3enraya.ui.theme.Juego3EnRayaTheme
 import pe.edu.upeu.juego3enraya.ui.viewmodel.TicTacToeViewModel
 import pe.edu.upeu.juego3enraya.ui.viewmodel.TicTacToeViewModelFactory
+
+import pe.edu.upeu.juego3enraya.view.TicTacToeScreen
+
+
 
 class MainActivity : ComponentActivity() {
 
@@ -26,11 +29,14 @@ class MainActivity : ComponentActivity() {
         // Obtener la base de datos para pasarla al ViewModel
         val db = AppDatabase.getDatabase(applicationContext)
 
+        // Crear el repositorio que usará el ViewModel
+        val repository = GameResultRepository(db.gameResultDao(), RetrofitInstance.api)
+
         setContent {
             Juego3EnRayaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // Crear una instancia del ViewModel y pasarla a TicTacToeScreen
-                    val viewModel: TicTacToeViewModel = viewModel(factory = TicTacToeViewModelFactory(db))
+                    val viewModel: TicTacToeViewModel = viewModel(factory = TicTacToeViewModelFactory(repository))
                     TicTacToeScreen(
                         context = this,  // Aquí pasamos el contexto
                         modifier = Modifier.padding(innerPadding),
@@ -41,6 +47,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun TicTacToePreview() {
     Juego3EnRayaTheme {
