@@ -86,6 +86,7 @@ main/
           ├── viewmodel/                    // Lógica de presentación
           │    ├── TicTacToeViewModel.kt    // ViewModel que gestiona la lógica del juego
           │    └── TicTacToeViewModelFactory.kt // Factory para crear instancias de ViewModel
+          ├──├──PdfExporter                  // Exportacion en pdf
           └── MainActivity.kt                // Actividad principal que inicia la aplicación
 
 ```
@@ -197,6 +198,6 @@ graph TD
 --
 -**David**: GameResultDao.kt, GameResultRepository.kt, TicTacToeViewModel.kt, AppDatabase.kt, TicTacToeScreen.kt, Network, GameResultApi, RetrofitInstance
 --
--**Mykol**: TicTacToeScreen.kt, MainActivity.kt, PdfExporter.kt, TicTacToeViewModel.kt, file_paths.xml, Theme.kt
+-**Maykol**: TicTacToeScreen.kt, MainActivity.kt, PdfExporter.kt, TicTacToeViewModel.kt, file_paths.xml, Theme.kt
 --
 
